@@ -1,5 +1,5 @@
 function setup() {
-  createCanvas(500, 400);
+  createCanvas(1920, 1080);
   somDaTrilha.loop();
 }
 
