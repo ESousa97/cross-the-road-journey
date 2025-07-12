@@ -4,6 +4,7 @@ var player, cars = [], particles = [];
 var scaleFactor = 1, canvasWidth, canvasHeight;
 var controlsHintVisible = true;
 
+// Calcula o tamanho do canvas, considerando a barra de navegação inferior no mobile
 function calculateResponsiveSize() {
     canvasWidth = window.innerWidth;
     canvasHeight = window.innerHeight;
@@ -28,29 +29,26 @@ function handleResize() {
     resizeCanvas(canvasWidth, canvasHeight);
 }
 
+// Sempre adiciona carros rápidos ao subir de nível!
 window.initializeCars = function() {
     cars = [];
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
     var fastChance = laneSystem.getFastLaneChance(gameData.level);
 
-    // Um carro por faixa ativa
+    // Um carro rápido garantido por faixa
     for (var i = 0; i < activeLanes.length; i++) {
         var lane = activeLanes[i];
         var baseSpeed = random(1.5, 3);
-        var isFast = true; // Sempre tem ao menos um carro rápido por faixa
+        var isFast = true;
         var startX = random() > 0.5 ? canvasWidth + random(50, 200) : -random(50, 200);
-        // Carro rápido em todas as faixas quando o nível for maior que 1
-        if (gameData.level >= 1 && random() < (0.3 + (gameData.level * 0.015))) isFast = true;
-        else isFast = random() < fastChance;
         cars.push(new Car(startX, lane, baseSpeed, i, isFast));
     }
-
-    // Adiciona carros extras para níveis maiores
+    // Carros extras sempre rápidos
     var extraCars = Math.floor(gameData.level / 2);
     for (var j = 0; j < extraCars && cars.length < 50; j++) {
         var lane2 = random(activeLanes);
         var baseSpeed2 = random(2, 5);
-        var isFast2 = true; // sempre rápido para ficar mais difícil
+        var isFast2 = true;
         var startX2 = random() > 0.5 ? canvasWidth + random(200, 600) : -random(200, 600);
         cars.push(new Car(startX2, lane2, baseSpeed2, cars.length, isFast2));
     }
@@ -105,26 +103,17 @@ function drawControlsHint() {
     pop();
 }
 
-function showControlsHint() {
-    controlsHintVisible = true;
-}
-
+function showControlsHint() { controlsHintVisible = true; }
 function hideControlsHint() {
     if (controlsHintVisible) {
         controlsHintVisible = false;
-        // Remove o controle de toque também
         var controls = document.getElementById('controls');
         if (controls) controls.style.display = 'none';
     }
 }
-
-// Some ao primeiro movimento (teclado, WASD, setas ou toque)
-function onPlayerInput() {
-    hideControlsHint();
-}
+function onPlayerInput() { hideControlsHint(); }
 window.onPlayerInput = onPlayerInput;
 
-// Remover dica ao pressionar teclas de movimentação
 window.addEventListener('keydown', function(e) {
     if ([37, 38, 39, 40, 87, 65, 83, 68, 32].indexOf(e.keyCode) > -1) {
         onPlayerInput();
@@ -132,7 +121,6 @@ window.addEventListener('keydown', function(e) {
     }
 }, false);
 
-// Remover dica ao tocar controles móveis
 ["touchUp", "touchDown", "touchLeft", "touchRight"].forEach(function(btnId) {
     var btn = document.getElementById(btnId);
     if (btn) btn.ontouchstart = onPlayerInput;
@@ -154,7 +142,6 @@ window.drawRoad = function() {
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
 
     stroke(255, 255, 0); strokeWeight(1);
-
     for (let i = 0; i < allLanes.length; i++) {
         if (i > 0) {
             if (i >= activeLanes.length) stroke(255, 255, 0, 80);
@@ -253,7 +240,7 @@ window.startGame = function() {
     player.respawnCentral(); initializeCars(); particles = [];
     document.getElementById('gameOverlay').classList.add('hidden');
     updateUI();
-    showControlsHint(); // mostra de novo a cada partida
+    showControlsHint();
 };
 
 window.togglePause = function() {
