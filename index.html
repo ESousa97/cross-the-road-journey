@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <title>Road Crossing - Jogo de Travessia</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.min.js"></script>
 </head>
@@ -27,19 +27,15 @@
             <button class="game-button" id="startButton">Iniciar</button>
             <button class="game-button" id="muteButton">🔊 Som</button>
         </div>
-        <div id="controls">
-            Use ↑ ↓ ← → ou W S A D para mover | ESPAÇO para pausar
+        <div id="touchControls">
+            <button class="touch-btn" id="touchLeft">←</button>
+            <button class="touch-btn" id="touchUp">↑</button>
+            <button class="touch-btn" id="touchDown">↓</button>
+            <button class="touch-btn" id="touchRight">→</button>
+            <button class="touch-btn" id="touchPause" style="margin-left: 14px;">⏸</button>
         </div>
     </div>
-    <div id="touchControls">
-    <button class="touch-btn" id="touchLeft">←</button>
-    <button class="touch-btn" id="touchUp">↑</button>
-    <button class="touch-btn" id="touchDown">↓</button>
-    <button class="touch-btn" id="touchRight">→</button>
-    <button class="touch-btn" id="touchPause" style="margin-left: 14px;">⏸</button>
-    </div>
-
-    <!-- Modularização: Carregue seus scripts em ordem -->
+    <!-- Modularização -->
     <script src="js/gameConfig.js"></script>
     <script src="js/gameState.js"></script>
     <script src="js/laneSystem.js"></script>

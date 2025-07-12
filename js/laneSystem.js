@@ -1,13 +1,14 @@
 window.laneSystem = {
     laneCount: 12,
     getAllLanes: function() {
-        // Gera as faixas dinamicamente entre o topo e o fundo do canvas
         let lanes = [];
-        let marginTop = canvasHeight * 0.12; // por exemplo, 12% do canvas de margem superior
-        let marginBottom = canvasHeight * 0.15; // por exemplo, 15% margem inferior
+        let marginTop = canvasHeight * 0.12;
+        let marginBottom = canvasHeight * 0.15;
         let areaHeight = canvasHeight - marginTop - marginBottom;
+
         for (let i = 0; i < this.laneCount; i++) {
-            let y = marginTop + (i + 0.5) * areaHeight / this.laneCount;
+            // i / (laneCount - 1) faz a 1ª e a última ficarem nas bordas do asfalto
+            let y = marginTop + (i / (this.laneCount - 1)) * areaHeight;
             lanes.push(y);
         }
         return lanes;

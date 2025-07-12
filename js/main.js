@@ -2,21 +2,11 @@
 
 var player, cars = [], particles = [];
 var scaleFactor = 1, canvasWidth, canvasHeight;
+var controlsHintVisible = true;
 
 function calculateResponsiveSize() {
-    // Mantém proporção 600x400 mas adapta para o máximo da tela
-    var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    var aspect = 600 / 400;
-    let w = windowWidth * 0.995;
-    let h = windowHeight * 0.995;
-    if (w / h > aspect) {
-        w = h * aspect;
-    } else {
-        h = w / aspect;
-    }
-    canvasWidth = Math.round(w);
-    canvasHeight = Math.round(h);
+    canvasWidth = window.innerWidth;
+    canvasHeight = window.innerHeight;
 }
 
 window.setup = function() {
@@ -30,6 +20,7 @@ window.setup = function() {
     document.getElementById('startButton').addEventListener('click', startGame);
     document.getElementById('muteButton').addEventListener('click', toggleSound);
     window.addEventListener('resize', handleResize);
+    showControlsHint();
 };
 
 function handleResize() {
@@ -41,22 +32,27 @@ window.initializeCars = function() {
     cars = [];
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
     var fastChance = laneSystem.getFastLaneChance(gameData.level);
+
+    // Um carro por faixa ativa
     for (var i = 0; i < activeLanes.length; i++) {
         var lane = activeLanes[i];
         var baseSpeed = random(1.5, 3);
-        var isFast = gameData.level >= 4 && random() < fastChance;
+        var isFast = true; // Sempre tem ao menos um carro rápido por faixa
         var startX = random() > 0.5 ? canvasWidth + random(50, 200) : -random(50, 200);
+        // Carro rápido em todas as faixas quando o nível for maior que 1
+        if (gameData.level >= 1 && random() < (0.3 + (gameData.level * 0.015))) isFast = true;
+        else isFast = random() < fastChance;
         cars.push(new Car(startX, lane, baseSpeed, i, isFast));
     }
-    if (gameData.level >= 3) {
-        var extraCars = Math.floor(gameData.level / 2);
-        for (var j = 0; j < extraCars && cars.length < 20; j++) {
-            var lane2 = random(activeLanes);
-            var baseSpeed2 = random(2, 5);
-            var isFast2 = gameData.level >= 4 && random() < fastChance;
-            var startX2 = random() > 0.5 ? canvasWidth + random(200, 600) : -random(200, 600);
-            cars.push(new Car(startX2, lane2, baseSpeed2, cars.length, isFast2));
-        }
+
+    // Adiciona carros extras para níveis maiores
+    var extraCars = Math.floor(gameData.level / 2);
+    for (var j = 0; j < extraCars && cars.length < 50; j++) {
+        var lane2 = random(activeLanes);
+        var baseSpeed2 = random(2, 5);
+        var isFast2 = true; // sempre rápido para ficar mais difícil
+        var startX2 = random() > 0.5 ? canvasWidth + random(200, 600) : -random(200, 600);
+        cars.push(new Car(startX2, lane2, baseSpeed2, cars.length, isFast2));
     }
 };
 
@@ -87,42 +83,97 @@ window.draw = function() {
         drawLevelInfo();
         if (levelUpAnimation.active) drawLevelUpAnimation();
     }
+
+    // Dica de controles (desaparece após interação)
+    if (controlsHintVisible) {
+        drawControlsHint();
+    }
 };
 
+function drawControlsHint() {
+    push();
+    fill(0, 0, 0, 220);
+    rectMode(CENTER);
+    var fontSize = Math.max(14, canvasWidth * 0.018);
+    textAlign(CENTER, CENTER);
+    textSize(fontSize);
+    fill(255, 220, 40);
+    var hint = "Use ↑ ↓ ← → ou W S A D para mover | ESPAÇO para pausar";
+    rect(canvasWidth / 2, canvasHeight - 36, textWidth(hint) + 36, fontSize * 2, 20);
+    fill(255);
+    text(hint, canvasWidth / 2, canvasHeight - 36);
+    pop();
+}
+
+function showControlsHint() {
+    controlsHintVisible = true;
+}
+
+function hideControlsHint() {
+    if (controlsHintVisible) {
+        controlsHintVisible = false;
+        // Remove o controle de toque também
+        var controls = document.getElementById('controls');
+        if (controls) controls.style.display = 'none';
+    }
+}
+
+// Some ao primeiro movimento (teclado, WASD, setas ou toque)
+function onPlayerInput() {
+    hideControlsHint();
+}
+window.onPlayerInput = onPlayerInput;
+
+// Remover dica ao pressionar teclas de movimentação
+window.addEventListener('keydown', function(e) {
+    if ([37, 38, 39, 40, 87, 65, 83, 68, 32].indexOf(e.keyCode) > -1) {
+        onPlayerInput();
+        if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) e.preventDefault();
+    }
+}, false);
+
+// Remover dica ao tocar controles móveis
+["touchUp", "touchDown", "touchLeft", "touchRight"].forEach(function(btnId) {
+    var btn = document.getElementById(btnId);
+    if (btn) btn.ontouchstart = onPlayerInput;
+});
+
 window.drawRoad = function() {
-    // Áreas verdes em cima e embaixo proporcionais
     let marginTop = canvasHeight * 0.12;
     let marginBottom = canvasHeight * 0.15;
+    let asfaltoHeight = canvasHeight - marginTop - marginBottom;
+
     fill(100, 150, 100);
     rect(0, 0, canvasWidth, marginTop);
-    fill(70, 70, 70);
-    rect(0, marginTop, canvasWidth, canvasHeight - marginTop - marginBottom);
-    fill(100, 150, 100);
     rect(0, canvasHeight - marginBottom, canvasWidth, marginBottom);
+
+    fill(70, 70, 70);
+    rect(0, marginTop, canvasWidth, asfaltoHeight);
 
     var allLanes = laneSystem.getAllLanes();
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
 
     stroke(255, 255, 0); strokeWeight(1);
 
-    for (let i = 0; i < allLanes.length - 1; i++) {
-        let y1 = allLanes[i] + 8;
-        let y2 = allLanes[i + 1] - 8;
-        let y = (y1 + y2) / 2;
-        if (i >= activeLanes.length - 1) stroke(255, 255, 0, 80);
-        else stroke(255, 255, 0, 255);
-        drawDashedLine(0, y, canvasWidth, y);
+    for (let i = 0; i < allLanes.length; i++) {
+        if (i > 0) {
+            if (i >= activeLanes.length) stroke(255, 255, 0, 80);
+            else stroke(255, 255, 0, 255);
+            drawDashedLine(0, allLanes[i], canvasWidth, allLanes[i]);
+        }
     }
     stroke(255, 255, 0, 255);
-    drawDashedLine(0, allLanes[0] - 8, canvasWidth, allLanes[0] - 8);
-    drawDashedLine(0, allLanes[allLanes.length - 1] + 8, canvasWidth, allLanes[allLanes.length - 1] + 8);
+    drawDashedLine(0, allLanes[0], canvasWidth, allLanes[0]);
+    drawDashedLine(0, allLanes[allLanes.length - 1], canvasWidth, allLanes[allLanes.length - 1]);
 
     for (let j = activeLanes.length; j < allLanes.length; j++) {
         fill(50, 50, 50, 120); noStroke();
-        rect(0, allLanes[j] - 8, canvasWidth, 16);
+        let yStart = allLanes[j];
+        let yEnd = (j + 1 < allLanes.length) ? allLanes[j + 1] : allLanes[j] + (allLanes[j] - allLanes[j-1]);
+        rect(0, yStart, canvasWidth, yEnd - yStart);
         fill(255, 100, 100, 180);
         textAlign(CENTER); textSize(10);
-        text("NÍVEL " + (j + 1 - 2), canvasWidth / 2, allLanes[j] + 3);
+        text("NÍVEL " + (j + 1 - 2), canvasWidth / 2, yStart + ((yEnd - yStart) / 2));
     }
     noStroke();
 };
@@ -189,6 +240,9 @@ window.createParticles = function(x, y, particleColor) {
 };
 
 window.keyPressed = function() {
+    if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'w', 'a', 's', 'd', ' '].includes(key)) {
+        onPlayerInput();
+    }
     if (key === ' ') togglePause();
     if (gameState === gameStates.MENU && (keyCode === ENTER || key === ' ')) startGame();
 };
@@ -199,6 +253,7 @@ window.startGame = function() {
     player.respawnCentral(); initializeCars(); particles = [];
     document.getElementById('gameOverlay').classList.add('hidden');
     updateUI();
+    showControlsHint(); // mostra de novo a cada partida
 };
 
 window.togglePause = function() {
@@ -239,11 +294,6 @@ window.saveHighScore = function() {
     localStorage.setItem('roadCrossingHighScore', gameData.highScore.toString());
 };
 
-// Previne o comportamento padrão das setas
-window.addEventListener('keydown', function(e) {
-    if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) e.preventDefault();
-}, false);
-
 function isMobile() {
     return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
@@ -265,6 +315,7 @@ function setupTouchControls() {
             if (btn) {
                 btn.ontouchstart = function(e) {
                     e.preventDefault();
+                    onPlayerInput();
                     simulateKeyDown(keyMap[btnId]);
                 };
                 btn.ontouchend = function(e) {
