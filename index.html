@@ -1,19 +1,1104 @@
 <!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.js"></script>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Road Crossing - Jogo de Travessia</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/p5.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.5.0/addons/p5.sound.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    <meta charset="utf-8" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-  </head>
-  <body>
-    <main>
-    </main>
-    <script src="sketch.js"></script>
-    <script src="ator.js"></script>
-    <script src="imagens.js"></script>
-    <script src="carro.js"></script>
-    <script src="p5.collide2d.js"></script>
-  </body>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #6b35ff 0%, #a200ff 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        #gameContainer {
+            position: relative;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #gameCanvas {
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        #gameUI {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            right: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .ui-element {
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 16px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #gameOverlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 24px;
+            border-radius: 15px;
+            z-index: 100;
+        }
+
+        #gameOverlay.hidden {
+            display: none;
+        }
+
+        .game-button {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .game-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .game-button:active {
+            transform: translateY(0);
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            text-align: center;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            #gameContainer {
+                padding: 10px;
+                margin: 10px;
+            }
+
+            .ui-element {
+                font-size: 14px;
+                padding: 8px 12px;
+            }
+
+            #gameOverlay {
+                font-size: 18px;
+            }
+
+            .game-button {
+                padding: 12px 25px;
+                font-size: 16px;
+            }
+
+            #controls {
+                font-size: 12px;
+                padding: 8px 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            #gameContainer {
+                padding: 5px;
+                margin: 5px;
+            }
+
+            .ui-element {
+                font-size: 12px;
+                padding: 6px 10px;
+            }
+
+            #gameOverlay {
+                font-size: 16px;
+            }
+
+            .game-button {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="gameContainer">
+        <div id="gameUI">
+            <div class="ui-element">
+                Pontos: <span id="scoreDisplay">0</span>
+            </div>
+            <div class="ui-element">
+                Recorde: <span id="highScoreDisplay">0</span>
+            </div>
+            <div class="ui-element">
+                Nível: <span id="levelDisplay">1</span>
+            </div>
+        </div>
+        
+        <div id="gameOverlay">
+            <h2 id="overlayTitle">Road Crossing</h2>
+            <p id="overlayText">Pressione INICIAR para começar!</p>
+            <button class="game-button" id="startButton">Iniciar</button>
+            <button class="game-button" id="muteButton">🔊 Som</button>
+        </div>
+
+        <div id="controls">
+            Use ↑ ↓ ← → ou W S A D para mover | ESPAÇO para pausar
+        </div>
+    </div>
+
+    <script>
+        // Configurações do jogo
+        const gameConfig = {
+            width: 600,
+            height: 400, // Aumentado para acomodar mais faixas
+            fps: 164,
+            difficulty: {
+                initial: 1,
+                increment: 0.1,
+                maxLevel: 50
+            }
+        };
+
+        // Estados do jogo
+        const gameStates = {
+            MENU: 'menu',
+            PLAYING: 'playing',
+            PAUSED: 'paused',
+            GAME_OVER: 'game_over'
+        };
+
+        // Variáveis globais do jogo
+        let gameState = gameStates.MENU;
+        let gameCanvas;
+        let gameData = {
+            score: 0,
+            highScore: 0,
+            level: 1,
+            lives: 3,
+            soundEnabled: true
+        };
+
+        // Objetos do jogo
+        let player;
+        let cars = [];
+        let particles = [];
+        let sounds = {};
+        let images = {};
+        let levelUpAnimation = {
+            active: false,
+            timer: 0,
+            duration: 180, // 3 segundos
+            scale: 1,
+            alpha: 255,
+            stars: []
+        };
+
+        // Configurações responsivas
+        let scaleFactor = 1;
+        let canvasWidth, canvasHeight;
+
+        // Sistema de faixas progressivo
+        const laneSystem = {
+            allLanes: [60, 100, 140, 180, 220, 280, 320, 360, 400, 440, 480, 520],
+            getActiveLanes: function(level) {
+                const baseLanes = Math.min(3 + (level - 1), 12);
+                return this.allLanes.slice(0, baseLanes);
+            },
+            getFastLaneChance: function(level) {
+                return Math.min(0.2 + (level - 4) * 0.1, 0.8);
+            }
+        };
+
+        // Classe do Jogador
+        class Player {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.size = 25;
+                this.speed = 4;
+                this.color = color(255, 100, 100);
+                this.trail = [];
+                this.invulnerable = false;
+                this.invulnerableTime = 0;
+                this.lastPosition = { x: x, y: y };
+            }
+
+            update() {
+                this.handleInput();
+                this.updateTrail();
+                this.updateInvulnerability();
+                this.checkBounds();
+                this.checkGoal();
+                this.checkOutOfBounds();
+            }
+
+            handleInput() {
+                if (gameState !== gameStates.PLAYING) return;
+
+                // Movimento vertical
+                if (keyIsDown(UP_ARROW) || keyIsDown(87)) { // W
+                    this.y -= this.speed;
+                }
+                if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) { // S
+                    this.y += this.speed;
+                }
+                
+                // Movimento horizontal
+                if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) { // A
+                    this.x -= this.speed;
+                }
+                if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) { // D
+                    this.x += this.speed;
+                }
+            }
+
+            updateTrail() {
+                this.trail.push({ x: this.x, y: this.y });
+                if (this.trail.length > 10) {
+                    this.trail.shift();
+                }
+            }
+
+            updateInvulnerability() {
+                if (this.invulnerable) {
+                    this.invulnerableTime--;
+                    if (this.invulnerableTime <= 0) {
+                        this.invulnerable = false;
+                    }
+                }
+            }
+
+            checkBounds() {
+                // Limites verticais
+                this.y = constrain(this.y, 0, canvasHeight - this.size);
+                // Limites horizontais
+                this.x = constrain(this.x, this.size/2, canvasWidth - this.size/2);
+            }
+
+            checkOutOfBounds() {
+                // Se sair completamente da tela, respawn no centro
+                if (this.x < -this.size || this.x > canvasWidth + this.size ||
+                    this.y < -this.size || this.y > canvasHeight + this.size) {
+                    this.respawnCentral();
+                }
+            }
+
+            checkGoal() {
+                if (this.y <= 30) {
+                    this.respawnRandom();
+                    gameData.score += 10 * gameData.level;
+                    updateUI();
+                    createParticles(this.x, this.y, color(0, 255, 0));
+                    
+                    // Aumenta o nível a cada 50 pontos
+                    if (gameData.score > 0 && gameData.score % 50 === 0) {
+                        const oldLevel = gameData.level;
+                        gameData.level++;
+                        if (gameData.level > oldLevel) {
+                            triggerLevelUpAnimation();
+                        }
+                        updateCarsForNewLevel();
+                    }
+                }
+            }
+
+            respawnCentral() {
+                this.x = canvasWidth / 2;
+                this.y = canvasHeight - 35;
+                this.invulnerable = true;
+                this.invulnerableTime = 60;
+                this.lastPosition = { x: this.x, y: this.y };
+            }
+
+            respawnRandom() {
+                // Posições aleatórias na parte inferior da tela
+                const randomPositions = [
+                    { x: 100, y: canvasHeight - 35 },
+                    { x: canvasWidth / 4, y: canvasHeight - 35 },
+                    { x: canvasWidth / 2, y: canvasHeight - 35 },
+                    { x: (canvasWidth * 3) / 4, y: canvasHeight - 35 },
+                    { x: canvasWidth - 100, y: canvasHeight - 35 }
+                ];
+                
+                const randomPos = random(randomPositions);
+                this.x = randomPos.x;
+                this.y = randomPos.y;
+                this.invulnerable = true;
+                this.invulnerableTime = 60;
+                this.lastPosition = { x: this.x, y: this.y };
+            }
+
+            draw() {
+                push();
+                
+                // Desenha trilha
+                for (let i = 0; i < this.trail.length; i++) {
+                    let alpha = map(i, 0, this.trail.length, 0, 100);
+                    fill(red(this.color), green(this.color), blue(this.color), alpha);
+                    noStroke();
+                    ellipse(this.trail[i].x, this.trail[i].y, this.size * 0.7);
+                }
+
+                // Efeito de piscar quando invulnerável
+                if (this.invulnerable && frameCount % 10 < 5) {
+                    tint(255, 150);
+                } else {
+                    noTint();
+                }
+
+                // Desenha o jogador
+                fill(this.color);
+                stroke(255);
+                strokeWeight(2);
+                ellipse(this.x, this.y, this.size);
+                
+                // Olhos
+                fill(255);
+                ellipse(this.x - 5, this.y - 5, 6);
+                ellipse(this.x + 5, this.y - 5, 6);
+                fill(0);
+                ellipse(this.x - 5, this.y - 5, 3);
+                ellipse(this.x + 5, this.y - 5, 3);
+
+                // Indicador de direção
+                fill(255, 200);
+                noStroke();
+                if (keyIsDown(UP_ARROW) || keyIsDown(87)) {
+                    triangle(this.x, this.y - this.size/2 - 5, this.x - 5, this.y - this.size/2, this.x + 5, this.y - this.size/2);
+                }
+                if (keyIsDown(DOWN_ARROW) || keyIsDown(83)) {
+                    triangle(this.x, this.y + this.size/2 + 5, this.x - 5, this.y + this.size/2, this.x + 5, this.y + this.size/2);
+                }
+                if (keyIsDown(LEFT_ARROW) || keyIsDown(65)) {
+                    triangle(this.x - this.size/2 - 5, this.y, this.x - this.size/2, this.y - 5, this.x - this.size/2, this.y + 5);
+                }
+                if (keyIsDown(RIGHT_ARROW) || keyIsDown(68)) {
+                    triangle(this.x + this.size/2 + 5, this.y, this.x + this.size/2, this.y - 5, this.x + this.size/2, this.y + 5);
+                }
+
+                noTint();
+                pop();
+            }
+
+            checkCollision(car) {
+                if (this.invulnerable) return false;
+                
+                let distance = dist(this.x, this.y, car.x + car.width/2, car.y + car.height/2);
+                return distance < (this.size/2 + car.width/2);
+            }
+
+            hit() {
+                if (this.invulnerable) return;
+                
+                this.respawnRandom();
+                gameData.lives--;
+                createParticles(this.x, this.y, color(255, 0, 0));
+                
+                if (gameData.lives <= 0) {
+                    gameOver();
+                }
+            }
+        }
+
+        // Classe do Carro
+        class Car {
+            constructor(x, y, speed, carType, isFast = false) {
+                this.x = x;
+                this.y = y;
+                this.width = 60;
+                this.height = 30;
+                this.baseSpeed = speed;
+                this.speed = speed;
+                this.isFast = isFast;
+                this.color = this.getRandomColor();
+                this.type = carType;
+                this.direction = random() > 0.5 ? 1 : -1;
+                this.trail = [];
+                
+                // Carros rápidos têm velocidade aumentada
+                if (this.isFast) {
+                    this.speed *= 1.8;
+                    this.baseSpeed *= 1.8;
+                }
+            }
+
+            getRandomColor() {
+                if (this.isFast) {
+                    // Carros rápidos têm cores mais vibrantes
+                    const fastColors = [
+                        color(255, 0, 0),     // Vermelho vibrante
+                        color(255, 100, 0),   // Laranja
+                        color(255, 0, 255),   // Magenta
+                        color(0, 255, 255),   // Ciano
+                        color(255, 255, 0)    // Amarelo
+                    ];
+                    return random(fastColors);
+                } else {
+                    // Carros normais têm cores mais suaves
+                    const normalColors = [
+                        color(100, 150, 255),
+                        color(150, 100, 255),
+                        color(100, 255, 150),
+                        color(255, 150, 100),
+                        color(200, 200, 100),
+                        color(150, 200, 200)
+                    ];
+                    return random(normalColors);
+                }
+            }
+
+            update() {
+                this.x += this.speed * this.direction;
+                
+                // Adiciona trilha para carros rápidos
+                if (this.isFast) {
+                    this.trail.push({ x: this.x + this.width/2, y: this.y + this.height/2 });
+                    if (this.trail.length > 8) {
+                        this.trail.shift();
+                    }
+                }
+                
+                // Reposiciona quando sai da tela
+                if (this.direction > 0 && this.x > canvasWidth + this.width) {
+                    this.x = -this.width;
+                    this.color = this.getRandomColor();
+                } else if (this.direction < 0 && this.x < -this.width) {
+                    this.x = canvasWidth + this.width;
+                    this.color = this.getRandomColor();
+                }
+            }
+
+            updateSpeed(levelMultiplier) {
+                this.speed = this.baseSpeed * levelMultiplier;
+                if (this.isFast) {
+                    this.speed *= 1.8; // Mantém o multiplicador de velocidade para carros rápidos
+                }
+            }
+
+            draw() {
+                push();
+                
+                // Desenha trilha para carros rápidos
+                if (this.isFast && this.trail.length > 0) {
+                    for (let i = 0; i < this.trail.length; i++) {
+                        let alpha = map(i, 0, this.trail.length, 0, 150);
+                        fill(red(this.color), green(this.color), blue(this.color), alpha);
+                        noStroke();
+                        ellipse(this.trail[i].x, this.trail[i].y, 8 - i);
+                    }
+                }
+                
+                // Cor especial para carros rápidos
+                if (this.isFast) {
+                    // Efeito de brilho
+                    fill(255, 255, 255, 100);
+                    noStroke();
+                    rect(this.x - 2, this.y - 2, this.width + 4, this.height + 4, 7);
+                }
+                
+                fill(this.color);
+                stroke(this.isFast ? 255 : 50);
+                strokeWeight(this.isFast ? 3 : 2);
+                rect(this.x, this.y, this.width, this.height, 5);
+                
+                // Janelas
+                fill(150, 200, 255, this.isFast ? 200 : 150);
+                rect(this.x + 5, this.y + 5, this.width - 10, this.height - 10, 3);
+                
+                // Faróis (indicam direção)
+                fill(this.isFast ? color(255, 255, 0) : color(255, 255, 150));
+                if (this.direction > 0) {
+                    ellipse(this.x + this.width - 5, this.y + 8, this.isFast ? 8 : 6);
+                    ellipse(this.x + this.width - 5, this.y + this.height - 8, this.isFast ? 8 : 6);
+                } else {
+                    ellipse(this.x + 5, this.y + 8, this.isFast ? 8 : 6);
+                    ellipse(this.x + 5, this.y + this.height - 8, this.isFast ? 8 : 6);
+                }
+                
+                // Rodas
+                fill(50);
+                ellipse(this.x + 10, this.y + this.height + 3, this.isFast ? 10 : 8);
+                ellipse(this.x + this.width - 10, this.y + this.height + 3, this.isFast ? 10 : 8);
+                
+                // Indicador de velocidade para carros rápidos
+                if (this.isFast) {
+                    fill(255, 0, 0);
+                    noStroke();
+                    ellipse(this.x + this.width/2, this.y - 5, 6);
+                }
+                
+                pop();
+            }
+        }
+
+        // Classe de Partículas
+        class Particle {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.vx = random(-3, 3);
+                this.vy = random(-3, 3);
+                this.life = 60;
+                this.maxLife = 60;
+                this.color = color;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.life--;
+                this.vx *= 0.98;
+                this.vy *= 0.98;
+            }
+
+            draw() {
+                push();
+                let alpha = map(this.life, 0, this.maxLife, 0, 255);
+                fill(red(this.color), green(this.color), blue(this.color), alpha);
+                noStroke();
+                ellipse(this.x, this.y, 6);
+                pop();
+            }
+
+            isDead() {
+                return this.life <= 0;
+            }
+        }
+
+        // Configuração responsiva
+        function calculateResponsiveSize() {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            
+            scaleFactor = Math.min(windowWidth / gameConfig.width, windowHeight / gameConfig.height) * 0.9;
+            scaleFactor = Math.max(scaleFactor, 0.5);
+            scaleFactor = Math.min(scaleFactor, 1.5);
+            
+            canvasWidth = Math.floor(gameConfig.width * scaleFactor);
+            canvasHeight = Math.floor(gameConfig.height * scaleFactor);
+        }
+
+        function setup() {
+            calculateResponsiveSize();
+            gameCanvas = createCanvas(canvasWidth, canvasHeight);
+            gameCanvas.parent('gameContainer');
+            gameCanvas.id('gameCanvas');
+            
+            player = new Player(canvasWidth / 2, canvasHeight - 35);
+            initializeCars();
+            loadHighScore();
+            
+            document.getElementById('startButton').addEventListener('click', startGame);
+            document.getElementById('muteButton').addEventListener('click', toggleSound);
+            window.addEventListener('resize', handleResize);
+        }
+
+        function handleResize() {
+            calculateResponsiveSize();
+            resizeCanvas(canvasWidth, canvasHeight);
+        }
+
+        function initializeCars() {
+            cars = [];
+            const activeLanes = laneSystem.getActiveLanes(gameData.level);
+            const fastChance = laneSystem.getFastLaneChance(gameData.level);
+            
+            console.log(`Nível ${gameData.level}: ${activeLanes.length} faixas ativas`);
+            
+            // Cria carros apenas nas faixas ativas
+            for (let i = 0; i < activeLanes.length; i++) {
+                let lane = activeLanes[i];
+                let baseSpeed = random(1.5, 3);
+                let isFast = gameData.level >= 4 && random() < fastChance;
+                let startX = random() > 0.5 ? canvasWidth + random(50, 200) : -random(50, 200);
+                
+                let car = new Car(startX, lane, baseSpeed, i, isFast);
+                cars.push(car);
+            }
+            
+            // Adiciona carros extras em níveis mais altos
+            if (gameData.level >= 3) {
+                let extraCars = Math.floor(gameData.level / 2);
+                for (let i = 0; i < extraCars && cars.length < 20; i++) { // Aumentado limite para 20 carros
+                    let lane = random(activeLanes);
+                    let baseSpeed = random(2, 5);
+                    let isFast = gameData.level >= 4 && random() < fastChance;
+                    let startX = random() > 0.5 ? canvasWidth + random(200, 600) : -random(200, 600);
+                    
+                    let car = new Car(startX, lane, baseSpeed, cars.length, isFast);
+                    cars.push(car);
+                }
+            }
+        }
+
+        function updateCarsForNewLevel() {
+            console.log(`Atualizando para nível ${gameData.level}`);
+            
+            // Atualiza velocidade de todos os carros
+            const speedMultiplier = 1 + (gameData.level - 1) * 0.3;
+            for (let car of cars) {
+                car.updateSpeed(speedMultiplier);
+            }
+            
+            // Reinicializa carros para incluir novas faixas
+            initializeCars();
+        }
+
+        function draw() {
+            background(50, 50, 100);
+            
+            drawRoad();
+            
+            if (gameState === gameStates.PLAYING) {
+                player.update();
+                player.draw();
+                
+                for (let car of cars) {
+                    car.update();
+                    car.draw();
+                    
+                    if (player.checkCollision(car)) {
+                        player.hit();
+                    }
+                }
+                
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    particles[i].update();
+                    particles[i].draw();
+                    
+                    if (particles[i].isDead()) {
+                        particles.splice(i, 1);
+                    }
+                }
+                
+                drawLives();
+                drawSpawnIndicators();
+                drawLevelInfo();
+                
+                // Desenha animação de level up
+                if (levelUpAnimation.active) {
+                    drawLevelUpAnimation();
+                }
+            }
+        }
+
+        function drawRoad() {
+            // Acostamento superior
+            fill(100, 150, 100);
+            rect(0, 0, canvasWidth, 30);
+            
+            // Asfalto - ocupa quase todo o espaço vertical
+            fill(70, 70, 70);
+            rect(0, 30, canvasWidth, canvasHeight - 80);
+            
+            // Desenha TODAS as 12 faixas sempre
+            const allLanes = laneSystem.allLanes;
+            const activeLanes = laneSystem.getActiveLanes(gameData.level);
+            
+            stroke(255, 255, 0);
+            strokeWeight(1);
+            
+            // Desenha linhas entre todas as faixas
+            for (let i = 0; i < allLanes.length - 1; i++) {
+                let y1 = allLanes[i] + 8;
+                let y2 = allLanes[i + 1] - 8;
+                let y = (y1 + y2) / 2;
+                
+                // Faixas inativas ficam mais fracas
+                if (i >= activeLanes.length - 1) {
+                    stroke(255, 255, 0, 80);
+                } else {
+                    stroke(255, 255, 0, 255);
+                }
+                
+                drawDashedLine(0, y, canvasWidth, y);
+            }
+            
+            // Linha superior da primeira faixa
+            stroke(255, 255, 0, 255);
+            drawDashedLine(0, allLanes[0] - 8, canvasWidth, allLanes[0] - 8);
+            
+            // Linha inferior da última faixa
+            stroke(255, 255, 0, 255);
+            drawDashedLine(0, allLanes[allLanes.length - 1] + 8, canvasWidth, allLanes[allLanes.length - 1] + 8);
+            
+            // Indicadores visuais das faixas inativas
+            for (let i = activeLanes.length; i < allLanes.length; i++) {
+                fill(50, 50, 50, 120);
+                noStroke();
+                rect(0, allLanes[i] - 8, canvasWidth, 16);
+                
+                // Texto "NÍVEL X" nas faixas inativas - mais compacto
+                fill(255, 100, 100, 180);
+                textAlign(CENTER);
+                textSize(10);
+                text(`NÍVEL ${i + 1 - 2}`, canvasWidth / 2, allLanes[i] + 3);
+            }
+            
+            // Acostamento inferior
+            fill(100, 150, 100);
+            rect(0, canvasHeight - 50, canvasWidth, 50);
+            
+            noStroke();
+        }
+
+        function drawDashedLine(x1, y1, x2, y2) {
+            let segments = 20;
+            let segmentLength = (x2 - x1) / segments;
+            
+            for (let i = 0; i < segments; i += 2) {
+                let startX = x1 + i * segmentLength;
+                let endX = x1 + (i + 1) * segmentLength;
+                line(startX, y1, endX, y2);
+            }
+        }
+
+        function drawLives() {
+            for (let i = 0; i < gameData.lives; i++) {
+                push();
+                fill(255, 100, 100);
+                stroke(255);
+                strokeWeight(2);
+                ellipse(canvasWidth - 30 - i * 35, 25, 20);
+                pop();
+            }
+        }
+
+        function drawSpawnIndicators() {
+            const spawnY = canvasHeight - 35;
+            const spawnXs = [100, canvasWidth/4, canvasWidth/2, (canvasWidth*3)/4, canvasWidth-100];
+            
+            for (let x of spawnXs) {
+                push();
+                fill(0, 255, 0, 50);
+                noStroke();
+                ellipse(x, spawnY, 15);
+                pop();
+            }
+        }
+
+        function drawLevelInfo() {
+            // Mostra informações do nível no canto inferior esquerdo
+            push();
+            fill(255, 255, 255, 200);
+            textAlign(LEFT);
+            textSize(12);
+            
+            const activeLanes = laneSystem.getActiveLanes(gameData.level);
+            const fastCars = cars.filter(car => car.isFast).length;
+            
+            text(`Faixas liberadas: ${activeLanes.length}/12`, 10, canvasHeight - 45);
+            if (gameData.level >= 4) {
+                text(`Carros rápidos: ${fastCars}`, 10, canvasHeight - 30);
+            }
+            
+            // Próximo desbloqueio
+            if (activeLanes.length < 12) {
+                const nextLevel = activeLanes.length + 1;
+                const pointsNeeded = (nextLevel - 1) * 50 - gameData.score;
+                if (pointsNeeded > 0) {
+                    fill(255, 255, 100, 180);
+                    text(`Próxima faixa em: ${pointsNeeded} pts`, 10, canvasHeight - 15);
+                }
+            } else {
+                fill(0, 255, 0, 180);
+                text(`TODAS AS FAIXAS DESBLOQUEADAS!`, 10, canvasHeight - 15);
+            }
+            pop();
+        }
+
+        function triggerLevelUpAnimation() {
+            levelUpAnimation.active = true;
+            levelUpAnimation.timer = 0;
+            levelUpAnimation.scale = 0.5;
+            levelUpAnimation.alpha = 255;
+            levelUpAnimation.stars = [];
+            
+            // Cria estrelas para a animação
+            for (let i = 0; i < 12; i++) {
+                levelUpAnimation.stars.push({
+                    x: canvasWidth / 2,
+                    y: canvasHeight / 2,
+                    vx: random(-8, 8),
+                    vy: random(-8, 8),
+                    rotation: 0,
+                    rotSpeed: random(-0.3, 0.3),
+                    size: random(8, 16)
+                });
+            }
+            
+            // Pausa momentaneamente o jogo para criar impacto
+            setTimeout(() => {
+                // Efeito sonoro seria adicionado aqui
+            }, 100);
+        }
+
+        function drawLevelUpAnimation() {
+            if (!levelUpAnimation.active) return;
+            
+            levelUpAnimation.timer++;
+            
+            // Animação da escala (efeito bounce)
+            if (levelUpAnimation.timer < 30) {
+                levelUpAnimation.scale = map(levelUpAnimation.timer, 0, 30, 0.5, 1.2);
+            } else if (levelUpAnimation.timer < 60) {
+                levelUpAnimation.scale = map(levelUpAnimation.timer, 30, 60, 1.2, 1.0);
+            }
+            
+            // Fade out
+            if (levelUpAnimation.timer > 120) {
+                levelUpAnimation.alpha = map(levelUpAnimation.timer, 120, levelUpAnimation.duration, 255, 0);
+            }
+            
+            // Atualiza e desenha estrelas
+            for (let star of levelUpAnimation.stars) {
+                star.x += star.vx;
+                star.y += star.vy;
+                star.rotation += star.rotSpeed;
+                star.vx *= 0.95;
+                star.vy *= 0.95;
+                
+                push();
+                translate(star.x, star.y);
+                rotate(star.rotation);
+                fill(255, 255, 0, levelUpAnimation.alpha * 0.8);
+                stroke(255, 255, 255, levelUpAnimation.alpha);
+                strokeWeight(2);
+                drawStar(0, 0, star.size * 0.5, star.size, 5);
+                pop();
+            }
+            
+            // Overlay semi-transparente
+            push();
+            fill(0, 0, 0, 100);
+            rect(0, 0, canvasWidth, canvasHeight);
+            pop();
+            
+            // Texto principal
+            push();
+            translate(canvasWidth / 2, canvasHeight / 2 - 30);
+            scale(levelUpAnimation.scale);
+            
+            // Sombra do texto
+            fill(0, 0, 0, levelUpAnimation.alpha * 0.5);
+            textAlign(CENTER);
+            textSize(32);
+            text(`NÍVEL ${gameData.level}!`, 3, 3);
+            
+            // Texto principal com gradiente simulado
+            fill(255, 215, 0, levelUpAnimation.alpha); // Dourado
+            text(`NÍVEL ${gameData.level}!`, 0, 0);
+            
+            // Texto secundário
+            textSize(16);
+            fill(255, 255, 255, levelUpAnimation.alpha);
+            
+            const messages = [
+                "Nova faixa desbloqueada!",
+                "Velocidade aumentada!",
+                "Carros rápidos liberados!",
+                "Tráfego mais intenso!",
+                "Meio caminho percorrido!",
+                "Velocidade máxima!",
+                "Tráfego caótico!",
+                "Quase no limite!",
+                "Faixa 10 desbloqueada!",
+                "Penúltima faixa!",
+                "🏆 TODAS AS FAIXAS! 🏆",
+                "MODO INSANO ATIVADO!",
+                "VELOCIDADE LUDICROUS!",
+                "MESTRE DAS ESTRADAS!"
+            ];
+            
+            const message = messages[Math.min(gameData.level - 2, messages.length - 1)];
+            text(message, 0, 35);
+            
+            // Barra de progresso
+            if (gameData.level <= 12) {
+                const progressWidth = 200;
+                const progressHeight = 8;
+                const progress = (gameData.level - 1) / 11; // Progresso até nível 12
+                
+                // Fundo da barra
+                fill(100, 100, 100, levelUpAnimation.alpha);
+                rect(-progressWidth/2, 55, progressWidth, progressHeight, 4);
+                
+                // Progresso
+                fill(0, 255, 100, levelUpAnimation.alpha);
+                rect(-progressWidth/2, 55, progressWidth * progress, progressHeight, 4);
+                
+                textSize(12);
+                fill(255, 255, 255, levelUpAnimation.alpha);
+                if (gameData.level < 12) {
+                    text(`${Math.round(progress * 100)}% até todas as faixas`, 0, 75);
+                } else {
+                    text(`🏆 TODAS AS FAIXAS DESBLOQUEADAS! 🏆`, 0, 75);
+                }
+            }
+            
+            pop();
+            
+            // Finaliza a animação
+            if (levelUpAnimation.timer >= levelUpAnimation.duration) {
+                levelUpAnimation.active = false;
+            }
+        }
+
+        function drawStar(x, y, radius1, radius2, npoints) {
+            let angle = TWO_PI / npoints;
+            let halfAngle = angle / 2.0;
+            beginShape();
+            for (let a = 0; a < TWO_PI; a += angle) {
+                let sx = x + cos(a) * radius2;
+                let sy = y + sin(a) * radius2;
+                vertex(sx, sy);
+                sx = x + cos(a + halfAngle) * radius1;
+                sy = y + sin(a + halfAngle) * radius1;
+                vertex(sx, sy);
+            }
+            endShape(CLOSE);
+        }
+
+        function createParticles(x, y, particleColor) {
+            for (let i = 0; i < 10; i++) {
+                particles.push(new Particle(x, y, particleColor));
+            }
+        }
+
+        function keyPressed() {
+            if (key === ' ') {
+                togglePause();
+            }
+            
+            if (gameState === gameStates.MENU && (keyCode === ENTER || key === ' ')) {
+                startGame();
+            }
+        }
+
+        function startGame() {
+            gameState = gameStates.PLAYING;
+            gameData.score = 0;
+            gameData.level = 1;
+            gameData.lives = 3;
+            levelUpAnimation.active = false;
+            player.respawnCentral();
+            initializeCars();
+            particles = [];
+            
+            document.getElementById('gameOverlay').classList.add('hidden');
+            updateUI();
+        }
+
+        function togglePause() {
+            if (gameState === gameStates.PLAYING) {
+                gameState = gameStates.PAUSED;
+                showOverlay('Pausado', 'Pressione ESPAÇO para continuar');
+            } else if (gameState === gameStates.PAUSED) {
+                gameState = gameStates.PLAYING;
+                document.getElementById('gameOverlay').classList.remove('hidden');
+                setTimeout(() => {
+                    document.getElementById('gameOverlay').classList.add('hidden');
+                }, 100);
+            }
+        }
+
+        function gameOver() {
+            gameState = gameStates.GAME_OVER;
+            
+            // Atualiza recorde
+            if (gameData.score > gameData.highScore) {
+                gameData.highScore = gameData.score;
+                saveHighScore();
+            }
+            
+            showOverlay('Game Over!', `Pontuação: ${gameData.score}\nRecorde: ${gameData.highScore}`);
+            updateUI();
+        }
+
+        function showOverlay(title, text) {
+            document.getElementById('overlayTitle').textContent = title;
+            document.getElementById('overlayText').textContent = text;
+            document.getElementById('gameOverlay').classList.remove('hidden');
+        }
+
+        function updateUI() {
+            document.getElementById('scoreDisplay').textContent = gameData.score;
+            document.getElementById('highScoreDisplay').textContent = gameData.highScore;
+            document.getElementById('levelDisplay').textContent = gameData.level;
+        }
+
+        function toggleSound() {
+            gameData.soundEnabled = !gameData.soundEnabled;
+            const button = document.getElementById('muteButton');
+            button.textContent = gameData.soundEnabled ? '🔊 Som' : '🔇 Mudo';
+        }
+
+        function loadHighScore() {
+            const saved = localStorage.getItem('roadCrossingHighScore');
+            if (saved) {
+                gameData.highScore = parseInt(saved);
+            }
+        }
+
+        function saveHighScore() {
+            localStorage.setItem('roadCrossingHighScore', gameData.highScore.toString());
+        }
+
+        // Previne o comportamento padrão das setas
+        window.addEventListener('keydown', function(e) {
+            if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) {
+                e.preventDefault();
+            }
+        }, false);
+    </script>
+</body>
 </html>
