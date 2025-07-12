@@ -9,10 +9,7 @@
 [![Main Language](https://img.shields.io/github/languages/top/ESousa97/cross-the-road-journey?style=for-the-badge&logo=javascript&logoColor=F7DF1E&color=43853d)](https://github.com/ESousa97/cross-the-road-journey)
 [![Repo Size](https://img.shields.io/github/repo-size/ESousa97/cross-the-road-journey?style=for-the-badge&logo=github&color=informational)](https://github.com/ESousa97/cross-the-road-journey)
 [![Last Commit](https://img.shields.io/github/last-commit/ESousa97/cross-the-road-journey?style=for-the-badge&logo=git&logoColor=white&color=blue)](https://github.com/ESousa97/cross-the-road-journey/commits/main)
-[![Open Issues](https://img.shields.io/github/issues/ESousa97/cross-the-road-journey?style=for-the-badge&color=orange)](https://github.com/ESousa97/cross-the-road-journey/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/ESousa97/cross-the-road-journey?style=for-the-badge&color=brightgreen)](https://github.com/ESousa97/cross-the-road-journey/pulls)
 [![Contributors](https://img.shields.io/github/contributors/ESousa97/cross-the-road-journey?style=for-the-badge&color=purple)](https://github.com/ESousa97/cross-the-road-journey/graphs/contributors)
-[![License](https://img.shields.io/github/license/ESousa97/cross-the-road-journey?style=for-the-badge&color=lightgrey)](./LICENSE)
 
 </div>
 
