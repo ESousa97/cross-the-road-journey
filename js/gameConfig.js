@@ -1,7 +1,10 @@
-// gameConfig.js
 window.gameConfig = {
-    width: 600,
-    height: 400,
-    fps: 164,
-    difficulty: { initial: 1, increment: 0.1, maxLevel: 50 }
+    width: 1920,
+    height: 1080,
+    fps: 244,
+    difficulty: {
+        initial: 1,
+        increment: 2,
+        maxLevel: 50
+    }
 };
