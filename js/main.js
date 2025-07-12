@@ -7,7 +7,17 @@ var controlsHintVisible = true;
 // Calcula o tamanho do canvas, considerando a barra de navegação inferior no mobile
 function calculateResponsiveSize() {
     canvasWidth = window.innerWidth;
-    canvasHeight = window.innerHeight;
+    // Detecta altura útil descontando safe area (env), caso haja
+    let safeArea = 0;
+    if (window.CSS && CSS.supports("padding-bottom: env(safe-area-inset-bottom)")) {
+        safeArea = parseInt(getComputedStyle(document.documentElement).getPropertyValue('env(safe-area-inset-bottom)')) || 0;
+    }
+    // Também considera barra personalizada se existir
+    const mobileSafeBar = document.getElementById('mobileSafeBar');
+    if (mobileSafeBar && mobileSafeBar.offsetHeight) {
+        safeArea = Math.max(safeArea, mobileSafeBar.offsetHeight);
+    }
+    canvasHeight = window.innerHeight - safeArea;
 }
 
 window.setup = function() {
@@ -33,9 +43,7 @@ function handleResize() {
 window.initializeCars = function() {
     cars = [];
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
-    var fastChance = laneSystem.getFastLaneChance(gameData.level);
-
-    // Um carro rápido garantido por faixa
+    // Quanto mais nível, mais carros extras rápidos!
     for (var i = 0; i < activeLanes.length; i++) {
         var lane = activeLanes[i];
         var baseSpeed = random(1.5, 3);
@@ -43,7 +51,6 @@ window.initializeCars = function() {
         var startX = random() > 0.5 ? canvasWidth + random(50, 200) : -random(50, 200);
         cars.push(new Car(startX, lane, baseSpeed, i, isFast));
     }
-    // Carros extras sempre rápidos
     var extraCars = Math.floor(gameData.level / 2);
     for (var j = 0; j < extraCars && cars.length < 50; j++) {
         var lane2 = random(activeLanes);
@@ -81,7 +88,6 @@ window.draw = function() {
         drawLevelInfo();
         if (levelUpAnimation.active) drawLevelUpAnimation();
     }
-
     // Dica de controles (desaparece após interação)
     if (controlsHintVisible) {
         drawControlsHint();
@@ -114,6 +120,7 @@ function hideControlsHint() {
 function onPlayerInput() { hideControlsHint(); }
 window.onPlayerInput = onPlayerInput;
 
+// Captura qualquer interação de movimento para ocultar a dica
 window.addEventListener('keydown', function(e) {
     if ([37, 38, 39, 40, 87, 65, 83, 68, 32].indexOf(e.keyCode) > -1) {
         onPlayerInput();
@@ -121,6 +128,7 @@ window.addEventListener('keydown', function(e) {
     }
 }, false);
 
+// Touch para mobile: oculta dica também
 ["touchUp", "touchDown", "touchLeft", "touchRight"].forEach(function(btnId) {
     var btn = document.getElementById(btnId);
     if (btn) btn.ontouchstart = onPlayerInput;
