@@ -1,19 +1,18 @@
 
 ---
-
 # 🚦 Cross the Road Journey
 
 > **Um jogo de travessia moderna, modular e responsiva em JavaScript e p5.js**
 
 <div align="center">
 
-[![Main Language](https://img.shields.io/github/languages/top/ESousa97/cross-the-road-journey?style=for-the-badge\&logo=javascript\&logoColor=F7DF1E\&color=43853d)](https://github.com/ESousa97/cross-the-road-journey)
-[![Repo Size](https://img.shields.io/github/repo-size/ESousa97/cross-the-road-journey?style=for-the-badge\&logo=github\&color=informational)](https://github.com/ESousa97/cross-the-road-journey)
-[![Last Commit](https://img.shields.io/github/last-commit/ESousa97/cross-the-road-journey?style=for-the-badge\&logo=git\&logoColor=white\&color=blue)](https://github.com/ESousa97/cross-the-road-journey/commits/main)
-[![Open Issues](https://img.shields.io/github/issues/ESousa97/cross-the-road-journey?style=for-the-badge\&color=orange)](https://github.com/ESousa97/cross-the-road-journey/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/ESousa97/cross-the-road-journey?style=for-the-badge\&color=brightgreen)](https://github.com/ESousa97/cross-the-road-journey/pulls)
-[![Contributors](https://img.shields.io/github/contributors/ESousa97/cross-the-road-journey?style=for-the-badge\&color=purple)](https://github.com/ESousa97/cross-the-road-journey/graphs/contributors)
-[![License](https://img.shields.io/github/license/ESousa97/cross-the-road-journey?style=for-the-badge\&color=lightgrey)](LICENSE)
+[![Main Language](https://img.shields.io/github/languages/top/ESousa97/cross-the-road-journey?style=for-the-badge&logo=javascript&logoColor=F7DF1E&color=43853d)](https://github.com/ESousa97/cross-the-road-journey)
+[![Repo Size](https://img.shields.io/github/repo-size/ESousa97/cross-the-road-journey?style=for-the-badge&logo=github&color=informational)](https://github.com/ESousa97/cross-the-road-journey)
+[![Last Commit](https://img.shields.io/github/last-commit/ESousa97/cross-the-road-journey?style=for-the-badge&logo=git&logoColor=white&color=blue)](https://github.com/ESousa97/cross-the-road-journey/commits/main)
+[![Open Issues](https://img.shields.io/github/issues/ESousa97/cross-the-road-journey?style=for-the-badge&color=orange)](https://github.com/ESousa97/cross-the-road-journey/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/ESousa97/cross-the-road-journey?style=for-the-badge&color=brightgreen)](https://github.com/ESousa97/cross-the-road-journey/pulls)
+[![Contributors](https://img.shields.io/github/contributors/ESousa97/cross-the-road-journey?style=for-the-badge&color=purple)](https://github.com/ESousa97/cross-the-road-journey/graphs/contributors)
+[![License](https://img.shields.io/github/license/ESousa97/cross-the-road-journey?style=for-the-badge&color=lightgrey)](./LICENSE)
 
 </div>
 
@@ -31,36 +30,41 @@
 8. [Resolução de Problemas](#resolução-de-problemas)
 9. [Licença](#licença)
 10. [Créditos](#créditos)
-11. [FAQ](#faq)
+11. [FAQ](#❓-faq)
 
 ---
 
 ## Descrição
 
-**Cross the Road Journey** é um jogo web inspirado em clássicos como *Frogger*, totalmente desenvolvido em JavaScript e [p5.js](https://p5js.org/). Ele desafia o jogador a atravessar sucessivas faixas de tráfego intenso, combinando reflexos, estratégia e uma curva de dificuldade dinâmica.
+**Cross the Road Journey** é um jogo web inspirado em clássicos como *Frogger*, totalmente desenvolvido em JavaScript e [p5.js](https://p5js.org/). O desafio: atravessar sucessivas faixas de tráfego intenso, combinando reflexos, estratégia e uma curva de dificuldade dinâmica.
 
-O projeto destaca-se pelo código modularizado, responsividade nativa (desktop/mobile), persistência local de recordes e arquitetura limpa — servindo tanto como entretenimento quanto como referência para desenvolvedores interessados em arquitetura de jogos web.
+O projeto destaca-se pelo código modular, responsividade (desktop/mobile), persistência local de recordes e arquitetura limpa — servindo tanto como entretenimento quanto como referência para desenvolvedores interessados em arquitetura de jogos web.
 
 ---
 
 ## Demonstração
 
 * **[🎮 Jogar Online – Clique aqui!](https://java-script-xi.vercel.app)**
+* Veja o jogo em ação no seu navegador — sem instalação!
 
-Veja o jogo em ação no seu navegador — sem instalação!
+<div align="center">
+
+<img src="./video/cross-the-road-journey.gif" alt="Demo animada do jogo" width="600" />
+<!-- Ou use o MP4 para navegadores modernos:
+<video src="./video/cross-the-road-journey-demo.mp4" autoplay loop muted playsinline width="600"></video>
+-->
+</div>
 
 ---
 
 ## Recursos do Jogo
 
-* **Controles multiplataforma:** Suporte a teclado (setas/WASD) e botões de toque (mobile).
-* **Níveis e dificuldade dinâmica:** Novas faixas e aumento de velocidade a cada 50 pontos.
-* **Feedback visual:** Animação de level up, efeitos de partículas e indicações na UI.
-* **Persistência local:** Recorde salvo com `localStorage`, disponível mesmo após fechar o navegador.
-* **Design responsivo:** Interface se adapta a qualquer tela.
-* **Código modular:** Separação clara entre entidades, lógica, estados e interface.
-
-![screenshot-demo](./video/cross-the-road-journey.gif) <!-- Use uma imagem real, se desejar -->
+- **Controles multiplataforma:** Suporte a teclado (setas/WASD) e botões de toque (mobile)
+- **Níveis e dificuldade dinâmica:** Novas faixas e aumento de velocidade a cada 50 pontos
+- **Feedback visual:** Animação de level up, efeitos de partículas e UI adaptativa
+- **Persistência local:** Recorde salvo com `localStorage`, disponível mesmo após fechar o navegador
+- **Design responsivo:** Interface se adapta a qualquer tela
+- **Código modular:** Separação clara entre entidades, lógica, estados e interface
 
 ---
 
@@ -68,23 +72,26 @@ Veja o jogo em ação no seu navegador — sem instalação!
 
 ### Estrutura de Diretórios
 
-```
+```bash
 cross-the-road-journey/
 ├── README.md
+├── LICENSE
 ├── index.html
 ├── css/
 │   └── style.css
-└── js/
-    ├── main.js
-    ├── player.js
-    ├── car.js
-    ├── laneSystem.js
-    ├── particle.js
-    ├── animations.js
-    ├── gameConfig.js
-    ├── gameState.js
-    └── ui.js
-```
+├── js/
+│   ├── main.js
+│   ├── player.js
+│   ├── car.js
+│   ├── laneSystem.js
+│   ├── particle.js
+│   ├── animations.js
+│   ├── gameConfig.js
+│   ├── gameState.js
+│   └── ui.js
+├── video/
+│   └── cross-the-road-journey.gif
+````
 
 ### Diagrama de Arquitetura
 
@@ -148,8 +155,8 @@ cd cross-the-road-journey
 
 ## Uso
 
-1. **Abra o jogo no navegador.**
-2. **Pressione "Iniciar".**
+1. **Abra o jogo no navegador**
+2. **Pressione "Iniciar"**
 3. **Controles:**
 
    * Desktop: `↑ ↓ ← →` ou `WASD`
@@ -163,15 +170,15 @@ cd cross-the-road-journey
 
 ### Principais Módulos
 
-* **main.js** — Inicializa o jogo, ciclo principal (`setup`, `draw`), orquestra todos os módulos.
-* **player.js** — Movimento, colisão e lógica do jogador.
-* **car.js** — Lógica de spawn, movimento e visual dos carros (inclusive carros rápidos).
-* **laneSystem.js** — Gerenciamento dinâmico de faixas e lógica de dificuldade.
-* **particle.js** — Efeitos de partículas para colisões/sucesso.
-* **animations.js** — Animações especiais (level up, feedback).
-* **gameConfig.js** — Constantes e parâmetros globais de configuração.
-* **gameState.js** — Máquina de estados (`MENU`, `PLAYING`, `PAUSED`, `GAME_OVER`).
-* **ui.js** — Atualização da interface (placar, overlays).
+* **main.js** — Inicializa o jogo, ciclo principal (`setup`, `draw`), orquestra todos os módulos
+* **player.js** — Movimento, colisão e lógica do jogador
+* **car.js** — Lógica de spawn, movimento e visual dos carros (inclusive carros rápidos)
+* **laneSystem.js** — Gerenciamento dinâmico de faixas e lógica de dificuldade
+* **particle.js** — Efeitos de partículas para colisões/sucesso
+* **animations.js** — Animações especiais (level up, feedback)
+* **gameConfig.js** — Constantes e parâmetros globais de configuração
+* **gameState.js** — Máquina de estados (`MENU`, `PLAYING`, `PAUSED`, `GAME_OVER`)
+* **ui.js** — Atualização da interface (placar, overlays)
 
 ### Customização rápida
 
@@ -199,59 +206,62 @@ cd cross-the-road-journey
 
 ---
 
-## Licença
+## 📜 Licença
 
-> **Sem licença definida ainda.**
->
-> Para uso, modificação ou distribuição, consulte o autor. Futuramente será incluída licença aberta (MIT sugerida).
+Este projeto está licenciado sob a [Licença MIT](./LICENSE) — uso livre para fins pessoais, acadêmicos e comerciais.
+Sinta-se à vontade para modificar, estudar e compartilhar!
+
+> **Atribuição:** Mantenha os créditos ao autor original em forks e derivados.
 
 ---
 
 ## Créditos
 
-* **Desenvolvimento:** [Enoque Sousa](https://github.com/ESousa97)
+* **Desenvolvimento:** [José Enoque Costa de Sousa](https://github.com/ESousa97)
   [LinkedIn](https://www.linkedin.com/in/enoque-sousa-bb89aa168/)
 
 ---
 
-## FAQ
+## ❓ FAQ
 
-**1. O jogo funciona em mobile?**
-Sim, é responsivo e possui controles de toque.
+**1. O jogo funciona em dispositivos móveis?**
 
-**2. Como os dados do recorde são salvos?**
-Via `localStorage` do navegador (persistente no mesmo dispositivo).
+> Sim! O Cross the Road Journey foi desenvolvido com design responsivo e possui controles de toque automáticos em telas menores.
 
-**3. Como alterar dificuldade, faixas ou visuais?**
-Basta editar os arquivos `gameConfig.js`, `laneSystem.js` ou `style.css`.
+**2. Preciso instalar algo para jogar?**
 
-**4. Quero contribuir, por onde começo?**
-Veja a [seção de contribuição](#contribuindo) e abra uma issue ou PR!
+> Não, basta acessar o link online no navegador. Só para desenvolver/modificar você precisa clonar o repositório e rodar localmente.
+
+**3. Como meu recorde é salvo?**
+
+> O recorde fica gravado localmente no navegador via `localStorage`, ou seja, permanece salvo mesmo fechando o site (mas não transfere entre dispositivos).
+
+**4. Dá para modificar as regras, visual ou dificuldade?**
+
+> Sim! O código é modular. É só editar os arquivos em `/js` (ex: `gameConfig.js` para dificuldade, `laneSystem.js` para as pistas, `style.css` para o visual).
+
+**5. Posso usar partes do código no meu próprio projeto?**
+
+> Pode usar como inspiração, mas recomendo adaptar e personalizar — e mantenha o crédito ao autor original.
+
+**6. Quais tecnologias eu preciso saber para contribuir?**
+
+> HTML5, CSS3 e JavaScript puro (com p5.js). Se você domina esses fundamentos, pode contribuir fácil!
+
+**7. O projeto aceita contribuições externas?**
+
+> Sim! Sugestões, PRs e feedbacks são bem-vindos. Basta abrir uma issue ou PR pelo GitHub.
+
+**8. Está aberto para colaborações, freelas ou parcerias?**
+
+> Sempre! Me chama pelo LinkedIn ou e-mail para conversarmos sobre parcerias, features ou outros games.
 
 ---
 
-# Explicação das Melhorias
+<div align="center">
 
-1. **Foco na experiência do usuário:** Simplifiquei e organizei o texto, tornando o README mais direto para onboarding rápido, sem perder tecnicidade.
-2. **Estrutura objetiva e padronizada:**
+Feito com dedicação por <strong>José Enoque Costa de Sousa</strong> 💻
 
-   * Coloquei **título, badges e índice** no topo (modelo internacional).
-   * Cada seção agora tem foco prático: *Recursos*, *Instalação*, *Uso*, *Documentação Técnica*.
-   * Exemplos de código e comandos prontos para copiar.
-3. **Visibilidade e clareza:**
+</div>
 
-   * Menos “texto acadêmico”, mais “ação”: links diretos para jogar, comandos de instalação, FAQ enxuto.
-   * Sugestão de screenshot (visuais atraentes melhoram retenção).
-4. **Documentação técnica separada:**
-
-   * Explicação dos módulos e arquitetura do código está em seção própria, permitindo tanto uso rápido quanto exploração por devs avançados.
-   * Diagrama em Mermaid para visualização rápida da arquitetura.
-5. **Resolução de problemas e FAQ:**
-
-   * Seção dedicada para perguntas reais de usuários iniciantes.
-6. **Contribuição facilitada:**
-
-   * Guia em etapas, incentivando padrões de commit e abertura de issues.
-7. **Licença clara:**
-
-   * Explicita ausência de licença (fundamental para transparência legal).
+---
