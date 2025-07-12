@@ -264,4 +264,6 @@ Feito com dedicação por <strong>José Enoque Costa de Sousa</strong> 💻
 
 </div>
 
+> ✨ **Criado em:** 23 de abr. de 2023 às 21:44
+
 ---
