@@ -2,16 +2,18 @@
 var player, cars = [], particles = [];
 var scaleFactor = 1, canvasWidth, canvasHeight;
 
+// --- Responsividade: Ajusta o tamanho do canvas conforme tela ---
 function calculateResponsiveSize() {
     var windowWidth = window.innerWidth;
-    var windowHeight = window.innerHeight;
-    scaleFactor = Math.min(windowWidth / gameConfig.width, windowHeight / gameConfig.height) * 0.9;
-    scaleFactor = Math.max(scaleFactor, 0.5);
-    scaleFactor = Math.min(scaleFactor, 1.5);
+    var windowHeight = window.innerHeight - (isMobile() ? 180 : 120); // Mais espaço para botões touch
+    scaleFactor = Math.min(windowWidth / gameConfig.width, windowHeight / gameConfig.height) * 0.99;
+    scaleFactor = Math.max(scaleFactor, 0.42); // Menor escala em celulares
+    scaleFactor = Math.min(scaleFactor, 1.6);
     canvasWidth = Math.floor(gameConfig.width * scaleFactor);
     canvasHeight = Math.floor(gameConfig.height * scaleFactor);
 }
 
+// --- Setup do jogo ---
 window.setup = function() {
     calculateResponsiveSize();
     gameCanvas = createCanvas(canvasWidth, canvasHeight);
@@ -23,13 +25,18 @@ window.setup = function() {
     document.getElementById('startButton').addEventListener('click', startGame);
     document.getElementById('muteButton').addEventListener('click', toggleSound);
     window.addEventListener('resize', handleResize);
+
+    // Ajusta controles touch
+    setupTouchControls();
 };
 
 function handleResize() {
     calculateResponsiveSize();
     resizeCanvas(canvasWidth, canvasHeight);
+    setupTouchControls();
 }
 
+// --- Inicialização dos carros ---
 window.initializeCars = function() {
     cars = [];
     var activeLanes = laneSystem.getActiveLanes(gameData.level);
@@ -59,6 +66,7 @@ window.updateCarsForNewLevel = function() {
     initializeCars();
 };
 
+// --- Loop principal de desenho ---
 window.draw = function() {
     background(50, 50, 100);
     drawRoad();
@@ -161,6 +169,7 @@ window.createParticles = function(x, y, particleColor) {
     for (var i = 0; i < 10; i++) particles.push(new Particle(x, y, particleColor));
 };
 
+// --- Lógica de eventos principais ---
 window.keyPressed = function() {
     if (key === ' ') togglePause();
     if (gameState === gameStates.MENU && (keyCode === ENTER || key === ' ')) startGame();
@@ -216,3 +225,70 @@ window.saveHighScore = function() {
 window.addEventListener('keydown', function(e) {
     if ([32, 37, 38, 39, 40].indexOf(e.keyCode) > -1) e.preventDefault();
 }, false);
+
+// --- RESPONSIVIDADE E CONTROLES TOUCH --- //
+
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+// Esconde instrução de teclas no mobile (UX extra)
+function hideDesktopControlsOnMobile() {
+    var controls = document.getElementById('controls');
+    if (controls) controls.style.display = isMobile() ? 'none' : '';
+}
+
+// Cria listeners de touch para os botões
+function setupTouchControls() {
+    var touchControls = document.getElementById('touchControls');
+    if (!touchControls) return;
+
+    if (isMobile()) {
+        touchControls.style.display = 'flex';
+        hideDesktopControlsOnMobile();
+
+        // Mapeamento de botões para teclas
+        var keyMap = {
+            touchUp: 38,
+            touchDown: 40,
+            touchLeft: 37,
+            touchRight: 39
+        };
+        Object.keys(keyMap).forEach(function(btnId) {
+            var btn = document.getElementById(btnId);
+            if (btn) {
+                btn.ontouchstart = function(e) {
+                    e.preventDefault();
+                    simulateKeyDown(keyMap[btnId]);
+                };
+                btn.ontouchend = function(e) {
+                    e.preventDefault();
+                    simulateKeyUp(keyMap[btnId]);
+                };
+            }
+        });
+        // Pause
+        var btnPause = document.getElementById('touchPause');
+        if (btnPause) {
+            btnPause.ontouchstart = function(e) {
+                e.preventDefault();
+                window.togglePause && window.togglePause();
+            }
+        }
+    } else {
+        touchControls.style.display = 'none';
+        hideDesktopControlsOnMobile();
+    }
+}
+function simulateKeyDown(keyCode) {
+    var evt = new KeyboardEvent('keydown', { keyCode: keyCode, which: keyCode });
+    window.dispatchEvent(evt);
+}
+function simulateKeyUp(keyCode) {
+    var evt = new KeyboardEvent('keyup', { keyCode: keyCode, which: keyCode });
+    window.dispatchEvent(evt);
+}
+
+// Inicializa os controles touch e responsividade ao carregar ou redimensionar
+window.addEventListener('load', setupTouchControls);
+window.addEventListener('resize', setupTouchControls);
