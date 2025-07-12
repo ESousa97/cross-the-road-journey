@@ -18,6 +18,18 @@
 
 ---
 
+<div align="center">
+⚡ Visão Rápida
+
+| **🔗 Online**       | [Acesse aqui na Vercel 🚀](https://java-script-xi.vercel.app)                                      |
+| ------------------- | --------------------------------------------------------------------------------------------------------- |
+| **👤 Autor**        | José Enoque Costa de Sousa                                                                                |
+| **📍 Localização**  | São Bernardo do Campo, SP - Brasil                                              |
+| **🌐 Contatos**     | [LinkedIn](https://www.linkedin.com/in/enoque-sousa-bb89aa168/) • [GitHub](https://github.com/SousaDev97) |
+</div>
+
+---
+
 ## Índice
 
 1. [Descrição](#descrição)
