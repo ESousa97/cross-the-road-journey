@@ -56,14 +56,6 @@ O projeto destaca-se pelo código modular, responsividade (desktop/mobile), pers
 * **[🎮 Jogar Online – Clique aqui!](https://java-script-xi.vercel.app)**
 * Veja o jogo em ação no seu navegador — sem instalação!
 
-<div align="center">
-
-<img src="./video/cross-the-road-journey.gif" alt="Demo animada do jogo" width="600" />
-<!-- Ou use o MP4 para navegadores modernos:
-<video src="./video/cross-the-road-journey-demo.mp4" autoplay loop muted playsinline width="600"></video>
--->
-</div>
-
 ---
 
 ## Recursos do Jogo
