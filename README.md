@@ -7,6 +7,7 @@
 > Jogo web inspirado em Frogger, reescrito com arquitetura modular, Vite, lint/test automatizados e UX responsiva.
 
 [![CI](https://github.com/ESousa97/cross-the-road-journey/actions/workflows/ci.yml/badge.svg)](https://github.com/ESousa97/cross-the-road-journey/actions/workflows/ci.yml)
+[![CodeFactor](https://www.codefactor.io/repository/github/esousa97/cross-the-road-journey/badge/main)](https://www.codefactor.io/repository/github/esousa97/cross-the-road-journey/overview/main)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Stack](https://img.shields.io/badge/stack-JavaScript%20%7C%20p5.js%20%7C%20Vite-blue)](#stack)
 [![Status](https://img.shields.io/badge/status-maintained-success)](#status)
@@ -113,3 +114,4 @@ Maintained. CI executa lint/test/build em cada PR. Dependabot habilitado para ma
 
 ## Suporte
 Abra uma issue ou envie um PR. Para vulnerabilidades, siga [SECURITY.md](SECURITY.md).
+
