@@ -114,4 +114,3 @@ Maintained. CI executa lint/test/build em cada PR. Dependabot habilitado para ma
 
 ## Suporte
 Abra uma issue ou envie um PR. Para vulnerabilidades, siga [SECURITY.md](SECURITY.md).
-
