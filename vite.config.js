@@ -10,7 +10,7 @@ export default defineConfig({
         sourcemap: true
     },
     test: {
-        environment: 'jsdom',
+        environment: 'node',
         coverage: {
             reporter: ['text', 'lcov'],
             provider: 'v8'
