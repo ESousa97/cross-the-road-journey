@@ -1,5 +1,4 @@
-// animations.js
-window.levelUpAnimation = {
+export const levelUpAnimation = {
     active: false,
     timer: 0,
     duration: 180,
@@ -8,13 +7,13 @@ window.levelUpAnimation = {
     stars: []
 };
 
-window.triggerLevelUpAnimation = function() {
+export function triggerLevelUpAnimation(canvasWidth, canvasHeight) {
     levelUpAnimation.active = true;
     levelUpAnimation.timer = 0;
     levelUpAnimation.scale = 0.5;
     levelUpAnimation.alpha = 255;
     levelUpAnimation.stars = [];
-    for (var i = 0; i < 12; i++) {
+    for (let i = 0; i < 12; i += 1) {
         levelUpAnimation.stars.push({
             x: canvasWidth / 2,
             y: canvasHeight / 2,
@@ -25,11 +24,11 @@ window.triggerLevelUpAnimation = function() {
             size: random(8, 16)
         });
     }
-};
+}
 
-window.drawLevelUpAnimation = function() {
+export function drawLevelUpAnimation(canvasWidth, canvasHeight, level) {
     if (!levelUpAnimation.active) return;
-    levelUpAnimation.timer++;
+    levelUpAnimation.timer += 1;
     if (levelUpAnimation.timer < 30)
         levelUpAnimation.scale = map(levelUpAnimation.timer, 0, 30, 0.5, 1.2);
     else if (levelUpAnimation.timer < 60)
@@ -37,8 +36,8 @@ window.drawLevelUpAnimation = function() {
     if (levelUpAnimation.timer > 120)
         levelUpAnimation.alpha = map(levelUpAnimation.timer, 120, levelUpAnimation.duration, 255, 0);
 
-    for (var i = 0; i < levelUpAnimation.stars.length; i++) {
-        var star = levelUpAnimation.stars[i];
+    for (let i = 0; i < levelUpAnimation.stars.length; i += 1) {
+        const star = levelUpAnimation.stars[i];
         star.x += star.vx;
         star.y += star.vy;
         star.rotation += star.rotSpeed;
@@ -63,60 +62,57 @@ window.drawLevelUpAnimation = function() {
     fill(0, 0, 0, levelUpAnimation.alpha * 0.5);
     textAlign(CENTER);
     textSize(32);
-    text("NÍVEL " + gameData.level + "!", 3, 3);
+    text(`NIVEL ${level}!`, 3, 3);
     fill(255, 215, 0, levelUpAnimation.alpha);
-    text("NÍVEL " + gameData.level + "!", 0, 0);
+    text(`NIVEL ${level}!`, 0, 0);
     textSize(16);
     fill(255, 255, 255, levelUpAnimation.alpha);
-    var messages = [
-        "Nova faixa desbloqueada!",
-        "Velocidade aumentada!",
-        "Carros rápidos liberados!",
-        "Tráfego mais intenso!",
-        "Meio caminho percorrido!",
-        "Velocidade máxima!",
-        "Tráfego caótico!",
-        "Quase no limite!",
-        "Faixa 10 desbloqueada!",
-        "Penúltima faixa!",
-        "🏆 TODAS AS FAIXAS! 🏆",
-        "MODO INSANO ATIVADO!",
-        "VELOCIDADE LUDICROUS!",
-        "MESTRE DAS ESTRADAS!"
+    const messages = [
+        'Nova faixa desbloqueada!',
+        'Velocidade aumentada!',
+        'Carros rapidos liberados!',
+        'Trafego mais intenso!',
+        'Meio caminho percorrido!',
+        'Velocidade maxima!',
+        'Trafego caotico!',
+        'Quase no limite!',
+        'Faixa 10 desbloqueada!',
+        'Penultima faixa!',
+        '🏆 TODAS AS FAIXAS! 🏆',
+        'MODO INSANO ATIVADO!',
+        'VELOCIDADE LUDICROUS!',
+        'MESTRE DAS ESTRADAS!'
     ];
-    var msg = messages[Math.min(gameData.level - 2, messages.length - 1)];
+    const msg = messages[Math.min(level - 2, messages.length - 1)];
     text(msg, 0, 35);
-    if (gameData.level <= 12) {
-        var progressWidth = 200;
-        var progressHeight = 8;
-        var progress = (gameData.level - 1) / 11;
+    if (level <= 12) {
+        const progressWidth = 200;
+        const progressHeight = 8;
+        const progress = (level - 1) / 11;
         fill(100, 100, 100, levelUpAnimation.alpha);
-        rect(-progressWidth/2, 55, progressWidth, progressHeight, 4);
+        rect(-progressWidth / 2, 55, progressWidth, progressHeight, 4);
         fill(0, 255, 100, levelUpAnimation.alpha);
-        rect(-progressWidth/2, 55, progressWidth * progress, progressHeight, 4);
+        rect(-progressWidth / 2, 55, progressWidth * progress, progressHeight, 4);
         textSize(12);
         fill(255, 255, 255, levelUpAnimation.alpha);
-        if (gameData.level < 12)
-            text(Math.round(progress * 100) + "% até todas as faixas", 0, 75);
-        else
-            text("🏆 TODAS AS FAIXAS DESBLOQUEADAS! 🏆", 0, 75);
+        if (level < 12) text(`${Math.round(progress * 100)}% ate todas as faixas`, 0, 75);
+        else text('🏆 TODAS AS FAIXAS DESBLOQUEADAS! 🏆', 0, 75);
     }
     pop();
-    if (levelUpAnimation.timer >= levelUpAnimation.duration)
-        levelUpAnimation.active = false;
-};
+    if (levelUpAnimation.timer >= levelUpAnimation.duration) levelUpAnimation.active = false;
+}
 
-window.drawStar = function(x, y, radius1, radius2, npoints) {
-    var angle = TWO_PI / npoints;
-    var halfAngle = angle / 2.0;
+export function drawStar(x, y, radius1, radius2, npoints) {
+    const angle = TWO_PI / npoints;
+    const halfAngle = angle / 2.0;
     beginShape();
-    for (var a = 0; a < TWO_PI; a += angle) {
-        var sx = x + cos(a) * radius2;
-        var sy = y + sin(a) * radius2;
+    for (let a = 0; a < TWO_PI; a += angle) {
+        let sx = x + cos(a) * radius2;
+        let sy = y + sin(a) * radius2;
         vertex(sx, sy);
         sx = x + cos(a + halfAngle) * radius1;
         sy = y + sin(a + halfAngle) * radius1;
         vertex(sx, sy);
     }
     endShape(CLOSE);
-};
+}

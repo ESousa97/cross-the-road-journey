@@ -1,0 +1,48 @@
+name: Bug report
+description: Reportar um problema no jogo ou tooling
+labels: [bug]
+title: "bug: "
+body:
+  - type: textarea
+    id: descricao
+    attributes:
+      label: Descricao
+      description: Explique o problema de forma concisa.
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: Resultado esperado
+    validations:
+      required: true
+  - type: textarea
+    id: obtido
+    attributes:
+      label: Resultado atual
+    validations:
+      required: true
+  - type: input
+    id: ambiente
+    attributes:
+      label: Ambiente
+      description: SO, navegador, resolucao, versao do repo/commit.
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs ou screenshots
+      description: Inclua erros do console ou imagens (se houver).
+    validations:
+      required: false

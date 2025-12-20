@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security report
+    url: https://github.com/ESousa97/cross-the-road-journey/security/policy
+    about: Para vulnerabilidades, siga o SECURITY.md.
