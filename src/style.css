@@ -28,9 +28,9 @@ body {
 
 #gameContainer {
     position: relative;
-    background: rgba(255,255,255,0.07);
+    background: rgba(255, 255, 255, 0.07);
     border-radius: 20px;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.22);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.22);
     overflow: hidden;
     width: 100vw;
     height: 100vh;
@@ -63,20 +63,23 @@ body {
 }
 
 .ui-element {
-    background: rgba(20,30,20,0.89);
+    background: rgba(20, 30, 20, 0.89);
     color: white;
     padding: 12px 28px;
     border-radius: 12px;
     font-weight: bold;
     font-size: 21px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.16);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.16);
     pointer-events: auto;
 }
 
 #gameOverlay {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(15,15,15,0.84);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(15, 15, 15, 0.84);
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -87,7 +90,9 @@ body {
     z-index: 999;
 }
 
-#gameOverlay.hidden { display: none; }
+#gameOverlay.hidden {
+    display: none;
+}
 
 .game-button {
     background: linear-gradient(45deg, #ff6b6b, #ee5a24);
@@ -98,10 +103,10 @@ body {
     border-radius: 26px;
     cursor: pointer;
     margin: 14px;
-    transition: all 0.28s cubic-bezier(.25,.8,.25,1);
+    transition: all 0.28s cubic-bezier(0.25, 0.8, 0.25, 1);
     font-weight: bold;
     letter-spacing: 1px;
-    box-shadow: 0 2px 8px rgba(80,0,0,0.12);
+    box-shadow: 0 2px 8px rgba(80, 0, 0, 0.12);
 }
 
 #controls {
@@ -109,7 +114,7 @@ body {
     bottom: 54px; /* Above the safe-bar on mobile */
     left: 50%;
     transform: translateX(-50%);
-    background: rgba(20,20,10,0.8);
+    background: rgba(20, 20, 10, 0.8);
     color: #fff;
     padding: 12px 22px;
     border-radius: 10px;
@@ -117,7 +122,7 @@ body {
     text-align: center;
     z-index: 70;
     backdrop-filter: blur(6px);
-    border: 1px solid rgba(255,255,255,0.08);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     pointer-events: none;
 }
 
@@ -136,7 +141,7 @@ body {
 
 .touch-btn {
     pointer-events: auto;
-    background: linear-gradient(120deg,#a200ff 0%, #ff9afd 100%);
+    background: linear-gradient(120deg, #a200ff 0%, #ff9afd 100%);
     color: #fff;
     border: none;
     font-size: 27px;
@@ -144,7 +149,7 @@ body {
     height: 48px;
     margin: 0 4px;
     border-radius: 50%;
-    box-shadow: 0 2px 8px rgba(40,0,80,0.15);
+    box-shadow: 0 2px 8px rgba(40, 0, 80, 0.15);
     font-weight: bold;
     display: flex;
     justify-content: center;
@@ -161,11 +166,11 @@ body {
     bottom: 0;
     min-height: 28px;
     height: calc(28px + var(--bottom-safe-area));
-    background: rgba(40,30,50,0.88);
+    background: rgba(40, 30, 50, 0.88);
     z-index: 9999;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
-    box-shadow: 0 -2px 16px rgba(0,0,0,0.22);
+    box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.22);
     padding-bottom: var(--bottom-safe-area);
     display: flex;
     align-items: center;
@@ -183,18 +188,55 @@ body {
 
 /* Media queries for mobile */
 @media (max-width: 900px) {
-    .ui-element { font-size: 16px; padding: 8px 13px; }
-    #gameOverlay { font-size: 18px; }
-    .game-button { padding: 12px 21px; font-size: 15px; }
-    #controls { font-size: 11px; padding: 7px 7px; }
+    .ui-element {
+        font-size: 16px;
+        padding: 8px 13px;
+    }
+
+    #gameOverlay {
+        font-size: 18px;
+    }
+
+    .game-button {
+        padding: 12px 21px;
+        font-size: 15px;
+    }
+
+    #controls {
+        font-size: 11px;
+        padding: 7px 7px;
+    }
 }
 
 @media (max-width: 600px) {
-    #gameUI { top: 10px; }
-    .ui-element { font-size: 13px; padding: 6px 8px; }
-    #gameOverlay { font-size: 13px; }
-    .game-button { padding: 9px 14px; font-size: 13px; }
-    #controls { font-size: 9px; padding: 5px 2px; }
-    #touchControls { bottom: 34px; }
-    #mobileSafeBar { min-height: 22px; }
+    #gameUI {
+        top: 10px;
+    }
+
+    .ui-element {
+        font-size: 13px;
+        padding: 6px 8px;
+    }
+
+    #gameOverlay {
+        font-size: 13px;
+    }
+
+    .game-button {
+        padding: 9px 14px;
+        font-size: 13px;
+    }
+
+    #controls {
+        font-size: 9px;
+        padding: 5px 2px;
+    }
+
+    #touchControls {
+        bottom: 34px;
+    }
+
+    #mobileSafeBar {
+        min-height: 22px;
+    }
 }
