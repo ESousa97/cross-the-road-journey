@@ -38,7 +38,7 @@
     "stylelint": "^16.10.0",
     "stylelint-config-standard": "^39.0.1",
     "vite": "^7.3.0",
-    "vitest": "4.0.16"
+    "vitest": "4.0.17"
   },
   "dependencies": {
     "p5": "^2.1.2"
