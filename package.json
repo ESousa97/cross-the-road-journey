@@ -29,7 +29,7 @@
   "author": "Jose Enoque Costa de Sousa",
   "license": "MIT",
   "devDependencies": {
-    "@vitest/coverage-v8": "4.0.16",
+    "@vitest/coverage-v8": "4.0.17",
     "eslint": "^9.10.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.30.0",
@@ -37,8 +37,8 @@
     "prettier": "^3.3.3",
     "stylelint": "^16.10.0",
     "stylelint-config-standard": "^39.0.1",
-    "vite": "^7.3.1",
-    "vitest": "4.0.16"
+    "vite": "^7.3.0",
+    "vitest": "4.0.17"
   },
   "dependencies": {
     "p5": "^2.1.2"
